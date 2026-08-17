@@ -51,6 +51,10 @@ export const createOrder = async (input: CreateOrderInput): Promise<IOrder> => {
   return order;
 };
 
+export const getAllOrders = async (): Promise<IOrder[]> => {
+  return Order.find().sort({ createdAt: -1 });
+};
+
 export const getOrderById = async (id: string): Promise<IOrder | null> => {
   return Order.findById(id);
 };

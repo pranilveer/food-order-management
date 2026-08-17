@@ -23,6 +23,10 @@ export const getMenuItems = (): Promise<MenuItem[]> => {
   return fetchAPI<MenuItem[]>("/menu");
 };
 
+export const getOrders = (): Promise<Order[]> => {
+  return fetchAPI<Order[]>("/orders");
+};
+
 export const createOrder = (order: {
   items: { menuItemId: string; quantity: number }[];
   customer: { name: string; address: string; phone: string };
@@ -35,4 +39,14 @@ export const createOrder = (order: {
 
 export const getOrderById = (id: string): Promise<Order> => {
   return fetchAPI<Order>(`/orders/${id}`);
+};
+
+export const updateOrderStatus = (
+  id: string,
+  status: string
+): Promise<Order> => {
+  return fetchAPI<Order>(`/orders/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
 };

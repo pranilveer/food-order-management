@@ -34,6 +34,16 @@ export default function Navbar() {
             >
               Orders
             </Link>
+            <Link
+              href="/admin"
+              className={`text-sm font-medium transition-colors ${
+                pathname.startsWith("/admin")
+                  ? "text-orange-500"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Admin
+            </Link>
           </div>
         </div>
       </div>
