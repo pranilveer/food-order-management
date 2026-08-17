@@ -53,7 +53,6 @@ export default function OrderStatusPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
     let mounted = true;
 
     const fetchOrder = async () => {
@@ -74,7 +73,7 @@ export default function OrderStatusPage() {
 
     fetchOrder();
 
-    interval = setInterval(fetchOrder, 5000);
+    const interval = setInterval(fetchOrder, 5000);
 
     return () => {
       mounted = false;
