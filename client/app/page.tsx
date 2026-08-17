@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { MenuItem } from "@/types";
 import { getMenuItems } from "@/services/api";
 import MenuItemCard from "@/components/menu/MenuItemCard";
+import CartSidebar from "@/components/cart/CartSidebar";
+import { useCart } from "@/components/cart/CartContext";
 
 export default function MenuPage() {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { addItem } = useCart();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -24,10 +27,6 @@ export default function MenuPage() {
 
     fetchMenu();
   }, []);
-
-  const handleAddToCart = (item: MenuItem) => {
-    console.log("Added to cart:", item);
-  };
 
   if (loading) {
     return (
@@ -53,10 +52,21 @@ export default function MenuPage() {
           No items available at the moment.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((item) => (
-            <MenuItemCard key={item._id} item={item} onAddToCart={handleAddToCart} />
-          ))}
+        <div className="flex gap-8">
+          <div className="flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {items.map((item) => (
+                <MenuItemCard
+                  key={item._id}
+                  item={item}
+                  onAddToCart={addItem}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="hidden lg:block w-80">
+            <CartSidebar />
+          </div>
         </div>
       )}
     </div>
