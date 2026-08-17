@@ -5,6 +5,7 @@ import { MenuItem } from "@/types";
 import { getMenuItems } from "@/services/api";
 import MenuItemCard from "@/components/menu/MenuItemCard";
 import CartSidebar from "@/components/cart/CartSidebar";
+import CartMobileBar from "@/components/cart/CartMobileBar";
 import { useCart } from "@/components/cart/CartContext";
 
 export default function MenuPage() {
@@ -69,6 +70,7 @@ export default function MenuPage() {
           </div>
         </div>
       )}
+      <CartMobileBar />
     </div>
   );
 }

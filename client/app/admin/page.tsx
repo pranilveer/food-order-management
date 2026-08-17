@@ -146,7 +146,8 @@ export default function AdminPage() {
         {filteredOrders.length === 0 ? (
           <div className="p-8 text-center text-gray-500">No orders found</div>
         ) : (
-          <table className="w-full">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[700px]">
             <thead className="bg-gray-50">
               <tr>
                 <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
@@ -220,6 +221,7 @@ export default function AdminPage() {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
