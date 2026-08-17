@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { ToastProvider } from "@/components/toast/ToastContext";
-import { getOrders } from "@/services/api";
+import * as api from "@/services/api";
 import AdminPage from "../page";
 
 jest.mock("@/services/api");
 
-const mockGetOrders = jest.mocked(getOrders);
+const mockApi = jest.mocked(api);
 
 const mockOrders = [
   {
@@ -36,7 +36,8 @@ const mockOrders = [
 describe("AdminPage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockGetOrders.mockResolvedValue(mockOrders as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockApi.getOrders.mockResolvedValue(mockOrders);
   });
 
   afterEach(() => {
@@ -84,7 +85,7 @@ describe("AdminPage", () => {
   });
 
   it("should show error state", async () => {
-    mockGetOrders.mockRejectedValue(new Error("Failed to load"));
+    mockApi.getOrders.mockRejectedValue(new Error("Failed to load"));
 
     render(<ToastProvider><AdminPage /></ToastProvider>);
 

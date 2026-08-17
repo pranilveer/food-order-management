@@ -1,11 +1,11 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
-import { getOrderById } from "@/services/api";
+import * as api from "@/services/api";
 import OrderStatusPage from "../[id]/page";
 
 jest.mock("@/services/api");
 
-const mockGetOrderById = jest.mocked(getOrderById);
+const mockApi = jest.mocked(api);
 
 jest.mock("next/navigation", () => ({
   useParams: () => ({ id: "order123" }),
@@ -37,7 +37,7 @@ const mockOrder = {
 describe("OrderStatusPage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockGetOrderById.mockResolvedValue(mockOrder as any);
+    mockApi.getOrderById.mockResolvedValue(mockOrder);
   });
 
   afterEach(() => {
@@ -85,7 +85,7 @@ describe("OrderStatusPage", () => {
   });
 
   it("should show error state", async () => {
-    mockGetOrderById.mockRejectedValue(new Error("Order not found"));
+    mockApi.getOrderById.mockRejectedValue(new Error("Order not found"));
 
     render(<OrderStatusPage />);
 
