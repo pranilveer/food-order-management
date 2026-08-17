@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/CartContext";
+import { useToast } from "@/components/toast/ToastContext";
 import CheckoutForm from "@/components/checkout/CheckoutForm";
 import { createOrder } from "@/services/api";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalAmount, clearCart } = useCart();
+  const { addToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,7 +53,9 @@ export default function CheckoutPage() {
       clearCart();
       router.push(`/orders/${order._id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to place order");
+      const message = err instanceof Error ? err.message : "Failed to place order";
+      setError(message);
+      addToast(message, "error");
     } finally {
       setLoading(false);
     }

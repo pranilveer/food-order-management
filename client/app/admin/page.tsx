@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { getOrders, updateOrderStatus } from "@/services/api";
+import { useToast } from "@/components/toast/ToastContext";
 import { Order, OrderStatus } from "@/types";
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
@@ -34,6 +35,7 @@ const formatDate = (date: string) =>
   });
 
 export default function AdminPage() {
+  const { addToast } = useToast();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,8 +65,11 @@ export default function AdminPage() {
     try {
       await updateOrderStatus(orderId, newStatus);
       await fetchOrders();
+      addToast(`Order status updated to ${STATUS_LABELS[newStatus]}`, "success");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update status");
+      const message = err instanceof Error ? err.message : "Failed to update status";
+      setError(message);
+      addToast(message, "error");
     } finally {
       setUpdatingId(null);
     }
