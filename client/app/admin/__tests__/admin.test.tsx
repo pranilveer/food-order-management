@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
+import { ToastProvider } from "@/components/toast/ToastContext";
 import AdminPage from "../page";
 
 jest.mock("@/services/api", () => ({
@@ -45,12 +46,12 @@ describe("AdminPage", () => {
   });
 
   it("should show loading state", () => {
-    render(<AdminPage />);
+    render(<ToastProvider><AdminPage /></ToastProvider>);
     expect(screen.getByText("Loading orders...")).toBeInTheDocument();
   });
 
   it("should display orders after loading", async () => {
-    render(<AdminPage />);
+    render(<ToastProvider><AdminPage /></ToastProvider>);
 
     await waitFor(() => {
       expect(screen.getByText("Admin Dashboard")).toBeInTheDocument();
@@ -61,7 +62,7 @@ describe("AdminPage", () => {
   });
 
   it("should show order stats", async () => {
-    render(<AdminPage />);
+    render(<ToastProvider><AdminPage /></ToastProvider>);
 
     await waitFor(() => {
       expect(screen.getByText("Total Orders")).toBeInTheDocument();
@@ -72,7 +73,7 @@ describe("AdminPage", () => {
   });
 
   it("should show filter buttons", async () => {
-    render(<AdminPage />);
+    render(<ToastProvider><AdminPage /></ToastProvider>);
 
     await waitFor(() => {
       expect(screen.getByText("All")).toBeInTheDocument();
@@ -87,7 +88,7 @@ describe("AdminPage", () => {
   it("should show error state", async () => {
     getOrders.mockRejectedValue(new Error("Failed to load"));
 
-    render(<AdminPage />);
+    render(<ToastProvider><AdminPage /></ToastProvider>);
 
     await waitFor(() => {
       expect(screen.getByText("Failed to load")).toBeInTheDocument();
