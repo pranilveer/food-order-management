@@ -2,13 +2,14 @@ import "@testing-library/jest-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import { ToastProvider } from "@/components/toast/ToastContext";
 import * as api from "@/services/api";
+import { Order } from "@/types";
 import AdminPage from "../page";
 
 jest.mock("@/services/api");
 
 const mockApi = jest.mocked(api);
 
-const mockOrders = [
+const mockOrders: Order[] = [
   {
     _id: "order1abc",
     items: [
@@ -36,7 +37,6 @@ const mockOrders = [
 describe("AdminPage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockApi.getOrders.mockResolvedValue(mockOrders);
   });
 
