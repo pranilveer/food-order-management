@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { MenuItem } from "@/types";
 
 export interface CartItem {
@@ -22,6 +22,21 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("cart");
+      if (saved) setItems(JSON.parse(saved));
+    } catch {}
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (hydrated) {
+      localStorage.setItem("cart", JSON.stringify(items));
+    }
+  }, [items, hydrated]);
 
   const addItem = useCallback((item: MenuItem) => {
     setItems((prev) => {

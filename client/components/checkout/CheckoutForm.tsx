@@ -50,7 +50,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#d1411e] focus:border-transparent transition-colors"
           placeholder="Enter your name"
         />
         {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
@@ -65,7 +65,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           rows={3}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#d1411e] focus:border-transparent transition-colors resize-none"
           placeholder="Enter your delivery address"
         />
         {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
@@ -80,7 +80,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#d1411e] focus:border-transparent transition-colors"
           placeholder="10-digit phone number"
           maxLength={10}
         />
@@ -90,7 +90,7 @@ export default function CheckoutForm({ onSubmit, loading }: CheckoutFormProps) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-[#d1411e] text-white py-3 rounded-lg hover:bg-[#b8371a] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? "Placing Order..." : "Place Order"}
       </button>

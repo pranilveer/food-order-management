@@ -27,8 +27,17 @@
   width: 100vw;
 }
 
+@media screen and (max-width: 768px) {
+  .container {
+    height: 250px;
+  }
+}
+
 @media screen and (max-width: 480px) {
   .container {
-    height: 50vh;
+    height: 200px;
+  }
+  .arrowContainer {
+    width: 15%;
   }
 }

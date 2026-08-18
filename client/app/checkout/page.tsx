@@ -24,7 +24,7 @@ export default function CheckoutPage() {
           <p className="text-gray-500 mb-4">Your cart is empty</p>
           <button
             onClick={() => router.push("/")}
-            className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+            className="bg-[#d1411e] text-white px-6 py-2 rounded-lg hover:bg-[#b8371a] transition-colors"
           >
             Browse Menu
           </button>
@@ -62,11 +62,11 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <div className="order-2 lg:order-1 lg:col-span-3 bg-white rounded-xl shadow-md p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Delivery Details
           </h2>
@@ -78,23 +78,33 @@ export default function CheckoutPage() {
           )}
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="order-1 lg:order-2 lg:col-span-2 bg-white rounded-xl shadow-md p-6 lg:sticky lg:top-28 lg:pt-4 lg:self-start">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             Order Summary
           </h2>
-          <div className="space-y-3 mb-4">
+          <div className="max-h-64 overflow-y-auto space-y-3 mb-4 pr-1">
             {items.map((item) => (
-              <div key={item.menuItem._id} className="flex justify-between text-sm">
-                <span className="text-gray-600">
-                  {item.menuItem.name} x {item.quantity}
-                </span>
-                <span className="font-medium">
+              <div key={item.menuItem._id} className="flex items-center gap-3">
+                <img
+                  src={item.menuItem.image}
+                  alt={item.menuItem.name}
+                  className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">{item.menuItem.name}</p>
+                  <p className="text-xs text-gray-500">{formatPrice(item.menuItem.price)} x {item.quantity}</p>
+                </div>
+                <span className="text-sm font-semibold text-gray-900 flex-shrink-0">
                   {formatPrice(item.menuItem.price * item.quantity)}
                 </span>
               </div>
             ))}
           </div>
-          <div className="border-t pt-4">
+          <div className="border-t pt-4 space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500">Items ({items.reduce((s, i) => s + i.quantity, 0)})</span>
+              <span className="text-gray-700">{formatPrice(totalAmount)}</span>
+            </div>
             <div className="flex justify-between">
               <span className="font-semibold text-gray-900">Total</span>
               <span className="font-bold text-lg text-green-600">
@@ -102,6 +112,12 @@ export default function CheckoutPage() {
               </span>
             </div>
           </div>
+          <a
+            href="/cart"
+            className="block text-center text-sm text-[#d1411e] hover:underline mt-4"
+          >
+            Edit Cart
+          </a>
         </div>
       </div>
     </div>
