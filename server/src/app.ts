@@ -7,7 +7,14 @@ import errorHandler from "./middleware/errorHandler";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://food-order-assign.vercel.app",
+    "http://localhost:3000",
+  ],
+  methods: ["GET", "POST", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+}));
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {
