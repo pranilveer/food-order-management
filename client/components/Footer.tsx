@@ -10,7 +10,7 @@ export default function Footer() {
             <div className={styles.item}>
                 <div className={styles.card}>
                     <h2 className={styles.motto}>
-                        Oh Yes, We Did! Hot and spicy's pizza, Well Baked Slice of Pizza.
+                        Oh Yes, We Did! Hot and spicy&apos;s pizza, Well Baked Slice of Pizza.
                     </h2>
                 </div>
                 <div className={styles.card}>

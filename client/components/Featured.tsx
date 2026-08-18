@@ -2,7 +2,7 @@
 
 import styles from '../styles/Featured.module.css'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export default function Featured() {
     const [index, setIndex] = useState(0)
@@ -23,14 +23,14 @@ export default function Featured() {
         }
     };
 
-    const autoScroll = () => {
+    const autoScroll = useCallback(() => {
         setIndex((prevIndex) => (prevIndex + 1) % images.length);
-    };
+    }, [images.length]);
 
     useEffect(() => {
         const intervalId = setInterval(autoScroll, 10000);
         return () => clearInterval(intervalId);
-    }, []);
+    }, [autoScroll]);
 
     return (
         <div className={styles.container}>
