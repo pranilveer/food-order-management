@@ -13,12 +13,12 @@ export default function MenuItemCard({ item, onAddToCart }: MenuItemCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative h-48 bg-gray-200">
+    <div className="bg-white rounded-lg overflow-hidden hover:scale-[1.03] transition-all duration-300 shadow-lg">
+      <div className="relative h-48 overflow-hidden">
         <img
           src={item.image}
           alt={item.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
         />
       </div>
       <div className="p-4">
@@ -27,12 +27,13 @@ export default function MenuItemCard({ item, onAddToCart }: MenuItemCardProps) {
           {item.description}
         </p>
         <div className="flex items-center justify-between mt-4">
-          <span className="text-xl font-bold text-green-600">
+          <span className="text-xl font-bold" style={{ color: '#b7903c' }}>
             {formatPrice(item.price)}
           </span>
           <button
             onClick={() => onAddToCart(item)}
-            className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium"
+            className="text-white px-4 py-2 rounded-lg transition-all duration-300 text-sm font-medium hover:brightness-110 hover:shadow-md"
+            style={{ backgroundColor: '#d1411e' }}
           >
             Add to Cart
           </button>

@@ -7,12 +7,13 @@ import MenuItemCard from "@/components/menu/MenuItemCard";
 import CartSidebar from "@/components/cart/CartSidebar";
 import CartMobileBar from "@/components/cart/CartMobileBar";
 import { useCart } from "@/components/cart/CartContext";
+import Featured from "@/components/Featured";
 
 export default function MenuPage() {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { addItem } = useCart();
+  const { addItem, totalItems } = useCart();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -45,17 +46,21 @@ export default function MenuPage() {
     );
   }
 
+  const hasCartItems = totalItems > 0;
+
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <>
+      <Featured />
+      <div className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Our Menu</h1>
       {items.length === 0 ? (
         <div className="text-center text-gray-500 py-12">
           No items available at the moment.
         </div>
       ) : (
-        <div className="flex gap-8">
+        <div className={`flex ${hasCartItems ? 'gap-8' : ''}`}>
           <div className="flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${hasCartItems ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-6`}>
               {items.map((item) => (
                 <MenuItemCard
                   key={item._id}
@@ -65,12 +70,15 @@ export default function MenuPage() {
               ))}
             </div>
           </div>
-          <div className="hidden lg:block w-80">
-            <CartSidebar />
-          </div>
+          {hasCartItems && (
+            <div className="hidden lg:block w-80">
+              <CartSidebar />
+            </div>
+          )}
         </div>
       )}
       <CartMobileBar />
     </div>
+    </>
   );
 }

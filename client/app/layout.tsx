@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import ClientProviders from "@/components/ClientProviders";
 import "./globals.css";
 
@@ -18,6 +19,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Food Order Management",
   description: "Order food online with real-time status tracking",
+  icons: {
+    icon: "/img/pizza.png",
+  },
 };
 
 export default function RootLayout({
@@ -33,6 +37,7 @@ export default function RootLayout({
         <ClientProviders>
           <Navbar />
           {children}
+          <Footer />
         </ClientProviders>
       </body>
     </html>

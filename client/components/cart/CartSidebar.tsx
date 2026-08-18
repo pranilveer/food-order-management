@@ -11,7 +11,7 @@ export default function CartSidebar() {
 
   if (items.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
+      <div className="bg-white rounded-lg shadow-md p-6 sticky top-28">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Cart</h2>
         <p className="text-gray-500 text-sm">Your cart is empty</p>
       </div>
@@ -19,7 +19,7 @@ export default function CartSidebar() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 sticky top-24">
+    <div className="bg-white rounded-lg shadow-md p-6 sticky top-28">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">
         Your Cart ({totalItems} {totalItems === 1 ? "item" : "items"})
       </h2>
@@ -75,13 +75,14 @@ export default function CartSidebar() {
       <div className="border-t pt-4">
         <div className="flex items-center justify-between mb-4">
           <span className="font-semibold text-gray-900">Total</span>
-          <span className="font-bold text-lg text-green-600">
+          <span className="font-bold text-lg" style={{ color: '#b7903c' }}>
             {formatPrice(totalAmount)}
           </span>
         </div>
         <Link
           href="/checkout"
-          className="block w-full bg-orange-500 text-white text-center py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium"
+          className="block w-full text-white text-center py-3 rounded-lg transition-all duration-300 font-medium hover:brightness-110 hover:shadow-md"
+          style={{ backgroundColor: '#d1411e' }}
         >
           Proceed to Checkout
         </Link>
