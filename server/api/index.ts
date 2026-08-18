@@ -1,23 +1,33 @@
 import dotenv from "dotenv";
 dotenv.config({ path: "../.env" });
 
-import connectDB from "../src/config/db";
 import mongoose from "mongoose";
-
-const connPromise = connectDB().catch((err) => {
-  console.error("MongoDB connection failed:", err.message);
-});
-
-import serverless from "serverless-http";
 import app from "../src/app";
 
-const handler = async (req: any, res: any) => {
-  await connPromise;
-  if (mongoose.connection.readyState !== 1) {
-    res.status(503).json({ success: false, error: "Database not connected" });
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected) {
     return;
   }
-  return serverless(app)(req, res);
+  
+  if (!process.env.MONGODB_URI) {
+    console.error("MONGODB_URI is not set");
+    return;
+  }
+
+  try {
+    const db = await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000,
+    });
+    isConnected = db.connections[0].readyState === 1;
+    console.log("MongoDB connected");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+  }
 };
 
-export default handler;
+export default async (req: any, res: any) => {
+  await connectDB();
+  return app(req, res);
+};
