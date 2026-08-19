@@ -37,7 +37,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[#d1411e]">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl shadow-md p-8">
           <h1 className="text-2xl font-bold text-gray-900 text-center mb-6">Login</h1>
