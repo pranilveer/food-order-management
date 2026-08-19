@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import {
   createOrder,
   getAllOrders,
+  getOrdersByUser,
   getOrderById,
   updateOrderStatus,
 } from "./order.service";
@@ -23,7 +24,7 @@ export const createOrderHandler = async (
       return;
     }
 
-    const order = await createOrder(parsed.data);
+    const order = await createOrder(parsed.data, req.user!.userId);
 
     res.status(201).json({ success: true, data: order });
   } catch (error) {
@@ -32,12 +33,17 @@ export const createOrderHandler = async (
 };
 
 export const getAllOrdersHandler = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    const orders = await getAllOrders();
+    let orders;
+    if (req.user!.role === "admin") {
+      orders = await getAllOrders();
+    } else {
+      orders = await getOrdersByUser(req.user!.userId);
+    }
     res.json({ success: true, data: orders });
   } catch (error) {
     next(error);
@@ -60,6 +66,11 @@ export const getOrderHandler = async (
     const order = await getOrderById(id);
 
     if (!order) {
+      res.status(404).json({ success: false, error: "Order not found" });
+      return;
+    }
+
+    if (req.user!.role !== "admin" && order.userId.toString() !== req.user!.userId) {
       res.status(404).json({ success: false, error: "Order not found" });
       return;
     }

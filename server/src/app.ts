@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import authRoutes from "./modules/auth/auth.routes";
 import menuRoutes from "./modules/menu/menu.routes";
 import orderRoutes from "./modules/orders/order.routes";
 import notFound from "./middleware/notFound";
@@ -13,7 +14,7 @@ app.use(cors({
     "http://localhost:3000",
   ],
   methods: ["GET", "POST", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.json());
 
@@ -21,6 +22,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/menu", menuRoutes);
 app.use("/api/orders", orderRoutes);
 

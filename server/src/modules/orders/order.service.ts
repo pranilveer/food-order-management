@@ -3,7 +3,7 @@ import Order, { IOrder } from "./order.model";
 import MenuItem from "../menu/menu.model";
 import { CreateOrderInput } from "./order.validation";
 
-export const createOrder = async (input: CreateOrderInput): Promise<IOrder> => {
+export const createOrder = async (input: CreateOrderInput, userId: string): Promise<IOrder> => {
   const menuItems = await MenuItem.find({
     _id: { $in: input.items.map((i) => i.menuItemId) },
   });
@@ -42,6 +42,7 @@ export const createOrder = async (input: CreateOrderInput): Promise<IOrder> => {
   const totalAmount = orderItems.reduce((sum, item) => sum + item.subtotal, 0);
 
   const order = await Order.create({
+    userId: new mongoose.Types.ObjectId(userId),
     items: orderItems,
     customer: input.customer,
     totalAmount,
@@ -49,6 +50,10 @@ export const createOrder = async (input: CreateOrderInput): Promise<IOrder> => {
   });
 
   return order;
+};
+
+export const getOrdersByUser = async (userId: string): Promise<IOrder[]> => {
+  return Order.find({ userId }).sort({ createdAt: -1 });
 };
 
 export const getAllOrders = async (): Promise<IOrder[]> => {

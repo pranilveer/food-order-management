@@ -47,6 +47,48 @@ const menuItems = [
     image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400",
     isAvailable: true,
   },
+  {
+    name: "Creamy Garlic Pasta",
+    description: "Penne in creamy garlic sauce with parmesan and herbs",
+    price: 24900,
+    image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400",
+    isAvailable: true,
+  },
+  {
+    name: "Chicken Tenders",
+    description: "Crispy golden fried chicken tenders with honey mustard dip",
+    price: 17900,
+    image: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400",
+    isAvailable: true,
+  },
+  {
+    name: "Caesar Salad",
+    description: "Romaine lettuce, croutons, parmesan with classic Caesar dressing",
+    price: 19900,
+    image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400",
+    isAvailable: true,
+  },
+  {
+    name: "Veggie Wrap",
+    description: "Grilled vegetables, hummus, and fresh greens in a whole wheat wrap",
+    price: 15900,
+    image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=400",
+    isAvailable: true,
+  },
+  {
+    name: "Iced Lemon Tea",
+    description: "Refreshing cold tea with fresh lemon and mint",
+    price: 7900,
+    image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400",
+    isAvailable: true,
+  },
+  {
+    name: "Chocolate Brownie",
+    description: "Warm chocolate brownie with a scoop of vanilla ice cream",
+    price: 14900,
+    image: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=400",
+    isAvailable: true,
+  },
 ];
 
 const seedDB = async (): Promise<void> => {

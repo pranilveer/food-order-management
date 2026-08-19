@@ -15,6 +15,7 @@ export interface IOrderItem {
 }
 
 export interface IOrder extends Document {
+  userId: mongoose.Types.ObjectId;
   items: IOrderItem[];
   customer: {
     name: string;
@@ -35,6 +36,7 @@ const orderItemSchema = new Schema<IOrderItem>({
 
 const orderSchema = new Schema<IOrder>(
   {
+    userId: { type: Schema.Types.ObjectId, required: true, ref: "User", index: true },
     items: { type: [orderItemSchema], required: true, validate: {
       validator: (items: IOrderItem[]) => items.length > 0,
       message: "Order must have at least one item",

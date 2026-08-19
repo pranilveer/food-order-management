@@ -5,12 +5,13 @@ import {
   getOrderHandler,
   updateOrderStatusHandler,
 } from "./order.controller";
+import { requireAuth, requireAdmin } from "../../middleware/auth";
 
 const router = Router();
 
-router.get("/", getAllOrdersHandler);
-router.post("/", createOrderHandler);
-router.get("/:id", getOrderHandler);
-router.patch("/:id/status", updateOrderStatusHandler);
+router.get("/", requireAuth, getAllOrdersHandler);
+router.post("/", requireAuth, createOrderHandler);
+router.get("/:id", requireAuth, getOrderHandler);
+router.patch("/:id/status", requireAuth, requireAdmin, updateOrderStatusHandler);
 
 export default router;
