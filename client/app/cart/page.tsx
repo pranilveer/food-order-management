@@ -43,37 +43,63 @@ export default function CartPage() {
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6">
         <div className="divide-y">
           {items.map((item) => (
-            <div key={item.menuItem._id} className="flex items-start gap-3 py-4 first:pt-0 last:pb-0">
-              <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.menuItem.image}
-                  alt={item.menuItem.name}
-                  className="w-full h-full object-cover"
-                />
+            <div key={item.menuItem._id} className="py-4 first:pt-0 last:pb-0">
+              <div className="flex items-start gap-3">
+                <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.menuItem.image}
+                    alt={item.menuItem.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-semibold text-gray-900">{item.menuItem.name}</h3>
+                  <p className="text-sm text-gray-500">{formatPrice(item.menuItem.price)}</p>
+                </div>
+                <div className="hidden md:flex items-center gap-2">
+                  <button
+                    onClick={() => updateQuantity(item.menuItem._id, item.quantity - 1)}
+                    disabled={item.quantity <= 1}
+                    className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-lg font-bold"
+                  >
+                    -
+                  </button>
+                  <span className="w-8 text-center font-semibold">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.menuItem._id, item.quantity + 1)}
+                    className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 transition-colors text-lg font-bold"
+                  >
+                    +
+                  </button>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  <p className="font-bold text-gray-900">{formatPrice(item.menuItem.price * item.quantity)}</p>
+                  <button
+                    onClick={() => removeItem(item.menuItem._id)}
+                    className="text-xs text-red-500 hover:text-red-700 transition-colors hidden md:inline"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-900">{item.menuItem.name}</h3>
-                <p className="text-sm text-gray-500">{formatPrice(item.menuItem.price)}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => updateQuantity(item.menuItem._id, item.quantity - 1)}
-                  disabled={item.quantity <= 1}
-                  className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-lg font-bold"
-                >
-                  -
-                </button>
-                <span className="w-8 text-center font-semibold">{item.quantity}</span>
-                <button
-                  onClick={() => updateQuantity(item.menuItem._id, item.quantity + 1)}
-                  className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 transition-colors text-lg font-bold"
-                >
-                  +
-                </button>
-              </div>
-              <div className="text-right flex-shrink-0 w-20">
-                <p className="font-bold text-gray-900">{formatPrice(item.menuItem.price * item.quantity)}</p>
+              <div className="flex items-center justify-between mt-3 ml-[76px] md:hidden">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => updateQuantity(item.menuItem._id, item.quantity - 1)}
+                    disabled={item.quantity <= 1}
+                    className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors text-lg font-bold"
+                  >
+                    -
+                  </button>
+                  <span className="w-8 text-center font-semibold">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.menuItem._id, item.quantity + 1)}
+                    className="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center hover:bg-gray-200 transition-colors text-lg font-bold"
+                  >
+                    +
+                  </button>
+                </div>
                 <button
                   onClick={() => removeItem(item.menuItem._id)}
                   className="text-xs text-red-500 hover:text-red-700 transition-colors"

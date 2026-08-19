@@ -13,7 +13,7 @@ export default function MenuPage() {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { addItem, totalItems } = useCart();
+  const { totalItems } = useCart();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -58,7 +58,6 @@ export default function MenuPage() {
                 <MenuItemCard
                   key={item._id}
                   item={item}
-                  onAddToCart={addItem}
                 />
               ))}
             </div>
