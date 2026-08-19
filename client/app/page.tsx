@@ -30,22 +30,6 @@ export default function MenuPage() {
     fetchMenu();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500 text-lg">Loading menu...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-red-500 text-lg">{error}</div>
-      </div>
-    );
-  }
-
   const hasCartItems = totalItems > 0;
 
   return (
@@ -53,7 +37,16 @@ export default function MenuPage() {
       <Featured />
       <div className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Our Menu</h1>
-      {items.length === 0 ? (
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#d1411e] mx-auto mb-4"></div>
+          <p className="text-gray-500">Loading menu...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center py-12">
+          <p className="text-red-500">{error}</p>
+        </div>
+      ) : items.length === 0 ? (
         <div className="text-center text-gray-500 py-12">
           No items available at the moment.
         </div>

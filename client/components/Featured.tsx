@@ -2,29 +2,61 @@
 
 import styles from '../styles/Featured.module.css'
 import Image from 'next/image'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 export default function Featured() {
     const [index, setIndex] = useState(0)
+    const [noTransition, setNoTransition] = useState(false)
     const images = [
-        "/img/featured.png",
-        "/img/featured3.png",
-        "/img/featured1.png",
-        "/img/featured4.png",
-        "/img/featured2.png"
+        "/img/featured.avif",
+        "/img/featured3.avif",
+        "/img/featured1.avif",
+        "/img/featured4.avif",
+        "/img/featured2.avif"
     ]
 
     const handleArrow = (direction: string) => {
         if (direction === "l") {
-            setIndex(index !== 0 ? index - 1 : images.length - 1)
+            if (index === 0) {
+                setNoTransition(true)
+                setIndex(images.length - 1)
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        setNoTransition(false)
+                    })
+                })
+            } else {
+                setIndex(index - 1)
+            }
         }
         if (direction === "r") {
-            setIndex(index !== images.length - 1 ? index + 1 : 0)
+            if (index === images.length - 1) {
+                setNoTransition(true)
+                setIndex(0)
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        setNoTransition(false)
+                    })
+                })
+            } else {
+                setIndex(index + 1)
+            }
         }
     };
 
     const autoScroll = useCallback(() => {
-        setIndex((prevIndex) => (prevIndex + 1) % images.length);
+        setIndex((prevIndex) => {
+            if (prevIndex === images.length - 1) {
+                setNoTransition(true)
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        setNoTransition(false)
+                    })
+                })
+                return 0
+            }
+            return prevIndex + 1
+        });
     }, [images.length]);
 
     useEffect(() => {
@@ -37,14 +69,18 @@ export default function Featured() {
             <div className={styles.arrowContainer} style={{ left: 0 }} onClick={() => handleArrow("l")}>
                 <Image src="/img/arrowl.png" alt="" fill style={{ objectFit: 'contain' }} />
             </div>
-            <div className={styles.wrapper} style={{ transform: `translateX(${-100 * index}vw)` }}>
-
+            <div
+                className={styles.wrapper}
+                style={{
+                    transform: `translateX(${-100 * index}vw)`,
+                    transition: noTransition ? 'none' : undefined,
+                }}
+            >
                 {images.map((img, i) => (
-                    <div className={styles.imgContainer} key={i} >
+                    <div className={styles.imgContainer} key={i}>
                         <Image src={img} alt="" fill style={{ objectFit: 'contain' }} priority={i === 0} />
                     </div>
                 ))}
-
             </div>
             <div className={styles.arrowContainer} style={{ right: 0 }} onClick={() => handleArrow("r")}>
                 <Image src="/img/arrowr.png" alt="" fill style={{ objectFit: 'contain' }} />
