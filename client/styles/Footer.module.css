@@ -34,6 +34,25 @@
   line-height: 1.5;
 }
 
+@media screen and (max-width: 768px) {
+  .container {
+    height: auto;
+    flex-direction: column;
+  }
+  .item:last-child {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 24px;
+  }
+  .item:first-child {
+    display: none;
+  }
+  .card {
+    padding: 0;
+    text-align: center;
+  }
+}
+
 @media screen and (max-width: 480px) {
   .container {
     height: auto;
@@ -42,13 +61,19 @@
   .item:first-child {
     display: none;
   }
-  .item {
-    flex-direction: column;
+  .item:last-child {
+    padding: 24px 16px;
+    gap: 20px;
   }
   .title {
-    font-size: 30px;
+    font-size: 20px;
   }
   .text {
+    font-size: 14px;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .motto {
     font-size: 20px;
   }
 }

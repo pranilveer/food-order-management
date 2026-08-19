@@ -66,6 +66,14 @@
   color: #fff;
   text-decoration: none;
 }
+.listItem button {
+  color: #fff;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
 .cartIcon {
   width: 32px;
   height: 32px;
@@ -95,6 +103,10 @@
 }
 
 .mobileLogo {
+  display: none;
+}
+
+.mobileNavItemLogo {
   display: none;
 }
 
@@ -130,21 +142,26 @@
   display: block;
 }
 
+.mobileOnly {
+  display: none;
+}
+
 @media screen and (max-width: 768px) {
   .container {
     height: 70px;
     padding: 0 15px;
   }
   .item:nth-child(1) {
-    flex: 0;
+    flex: 1;
   }
   .callButton {
-    height: 40px;
-    width: 40px;
-    padding: 8px;
+    display: none;
   }
   .texts {
     display: none;
+  }
+  .mobileNavItemLogo {
+    display: block;
   }
   .item:nth-child(2) {
     flex: 1;
@@ -190,6 +207,9 @@
   }
   .hamburger {
     display: flex;
+  }
+  .mobileOnly {
+    display: block;
   }
   .item:last-child {
     flex: 0;

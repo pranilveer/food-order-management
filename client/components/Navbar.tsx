@@ -18,6 +18,7 @@ export default function Navbar() {
     <>
     <div className={styles.container}>
       <div className={styles.item}>
+        <Link href="/" onClick={() => setMenuOpen(false)}><Image className={styles.mobileNavItemLogo} src="/img/logo.png" alt="Logo" width={100} height={35} /></Link>
         <div className={styles.callButton}>
           <Image src="/img/telephone.png" alt="Telephone" width={32} height={32} />
         </div>
@@ -38,6 +39,17 @@ export default function Navbar() {
             <li className={styles.listItem}><Link href="/admin" onClick={() => setMenuOpen(false)}>Admin</Link></li>
           )}
           <li className={styles.listItem}><Link href="#footer" onClick={() => setMenuOpen(false)}>Contact</Link></li>
+          {isAuthenticated ? (
+            <li className={`${styles.listItem} ${styles.mobileOnly}`}>
+              <button onClick={() => { setMenuOpen(false); setShowLogoutModal(true); }}>
+                Logout
+              </button>
+            </li>
+          ) : (
+            <li className={`${styles.listItem} ${styles.mobileOnly}`}>
+              <Link href="/login" onClick={() => setMenuOpen(false)}>Login</Link>
+            </li>
+          )}
         </ul>
       </div>
       <div className={styles.item}>
