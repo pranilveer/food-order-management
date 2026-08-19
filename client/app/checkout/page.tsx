@@ -15,6 +15,7 @@ export default function CheckoutPage() {
   const { addToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   const formatPrice = (price: number) => `₹${(price / 100).toFixed(0)}`;
 
@@ -81,8 +82,12 @@ export default function CheckoutPage() {
         customer,
       });
 
-      router.push(`/orders/${order._id}`);
-      clearCart();
+      setOrderSuccess(true);
+
+      setTimeout(() => {
+        clearCart();
+        router.push(`/orders/${order._id}`);
+      }, 2500);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to place order";
       setError(message);
@@ -91,6 +96,79 @@ export default function CheckoutPage() {
       setLoading(false);
     }
   };
+
+  if (orderSuccess) {
+    return (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="success-checkmark mb-6">
+            <div className="checkmark-circle">
+              <svg className="checkmark" viewBox="0 0 52 52">
+                <circle className="checkmark-circle-bg" cx="26" cy="26" r="25" fill="none" />
+                <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+              </svg>
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Placed Successfully!</h2>
+          <p className="text-gray-500">Redirecting to your order...</p>
+        </div>
+        <style jsx>{`
+          .success-checkmark {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+          }
+          .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #4ade80;
+            stroke-miterlimit: 10;
+            animation: scale .3s ease-in-out .9s both;
+          }
+          .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #4ade80;
+            stroke-miterlimit: 10;
+            margin: 0 auto;
+            box-shadow: inset 0 0 0 #4ade80;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+          }
+          .checkmark-circle-bg {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #4ade80;
+            animation: stroke .6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+          }
+          .checkmark-check {
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            stroke-width: 2;
+            stroke: #fff;
+            animation: stroke .3s cubic-bezier(0.65, 0, 0.45, 1) .4s forwards;
+          }
+          @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+          }
+          @keyframes scale {
+            0%, 100% { transform: none; }
+            50% { transform: scale3d(1.1, 1.1, 1); }
+          }
+          @keyframes fill {
+            100% { box-shadow: inset 0 0 0 40px #4ade80; }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
