@@ -152,24 +152,35 @@
     position: relative;
   }
   .list {
-    display: none;
-    position: absolute;
+    position: fixed;
     top: 70px;
     left: 0;
+    right: 0;
     width: 100%;
     flex-direction: column;
     background-color: #d1411e;
-    padding: 10px 0;
+    padding: 0;
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
   }
   .listOpen {
-    display: flex;
+    max-height: 400px;
+    padding: 10px 0;
   }
   .listItem {
-    margin: 10px 0;
+    margin: 6px 0;
     font-size: 18px;
     text-align: center;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .listOpen .listItem {
+    opacity: 1;
+    transform: translateY(0);
   }
   .menuLogo {
     display: none;
