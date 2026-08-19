@@ -43,7 +43,7 @@ export default function CartPage() {
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6">
         <div className="divide-y">
           {items.map((item) => (
-            <div key={item.menuItem._id} className="flex items-center gap-4 py-4 first:pt-0 last:pb-0">
+            <div key={item.menuItem._id} className="flex items-start gap-3 py-4 first:pt-0 last:pb-0">
               <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                 <img
                   src={item.menuItem.image}
@@ -52,7 +52,7 @@ export default function CartPage() {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-900 truncate">{item.menuItem.name}</h3>
+                <h3 className="font-semibold text-gray-900">{item.menuItem.name}</h3>
                 <p className="text-sm text-gray-500">{formatPrice(item.menuItem.price)}</p>
               </div>
               <div className="flex items-center gap-2">
