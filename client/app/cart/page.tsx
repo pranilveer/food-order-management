@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useCart } from "@/components/cart/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -45,9 +46,11 @@ export default function CartPage() {
           {items.map((item) => (
             <div key={item.menuItem._id} className="flex items-start gap-3 py-4 first:pt-0 last:pb-0">
               <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                <img
+                <Image
                   src={item.menuItem.image}
                   alt={item.menuItem.name}
+                  width={64}
+                  height={64}
                   className="w-full h-full object-cover"
                 />
               </div>

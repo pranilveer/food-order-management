@@ -2,7 +2,7 @@
 
 import styles from '../styles/Featured.module.css'
 import Image from 'next/image'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export default function Featured() {
     const [index, setIndex] = useState(0)

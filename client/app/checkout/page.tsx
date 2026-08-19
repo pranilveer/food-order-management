@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useCart } from "@/components/cart/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/toast/ToastContext";
@@ -116,9 +117,11 @@ export default function CheckoutPage() {
           <div className="max-h-64 overflow-y-auto space-y-3 mb-4 pr-1">
             {items.map((item) => (
               <div key={item.menuItem._id} className="flex items-center gap-3">
-                <img
+                <Image
                   src={item.menuItem.image}
                   alt={item.menuItem.name}
+                  width={48}
+                  height={48}
                   className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
                 />
                 <div className="flex-1 min-w-0">
