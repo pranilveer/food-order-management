@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getOrders } from "@/services/api";
+import { useAuth } from "@/contexts/AuthContext";
 import { Order, OrderStatus } from "@/types";
 
 const STATUS_COLORS: Record<OrderStatus, string> = {
@@ -22,10 +24,18 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
 const formatPrice = (price: number) => `₹${(price / 100).toFixed(0)}`;
 
 export default function OrdersPage() {
+  const router = useRouter();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (authLoading) return;
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
     const fetchOrders = async () => {
       try {
         const data = await getOrders();
@@ -37,9 +47,9 @@ export default function OrdersPage() {
       }
     };
     fetchOrders();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="text-center py-12">
@@ -50,8 +60,25 @@ export default function OrdersPage() {
     );
   }
 
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Orders</h1>
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <p className="text-gray-700 text-lg mb-2">Please login to view your orders</p>
+          <button
+            onClick={() => router.push("/login?redirect=/orders")}
+            className="bg-[#d1411e] text-white px-6 py-3 rounded-lg hover:bg-[#b8371a] transition-colors font-medium mt-4"
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-8 min-h-[60vh]">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Orders</h1>
 
       {orders.length === 0 ? (

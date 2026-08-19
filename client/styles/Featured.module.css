@@ -29,15 +29,16 @@
 
 @media screen and (max-width: 768px) {
   .container {
-    height: 250px;
+    height: 400px;
   }
 }
 
 @media screen and (max-width: 480px) {
   .container {
-    height: 200px;
+    height: 300px;
   }
   .arrowContainer {
-    width: 15%;
+    width: 10%;
+    height: 15%;
   }
 }

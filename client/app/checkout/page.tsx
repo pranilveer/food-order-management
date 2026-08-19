@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/toast/ToastContext";
 import CheckoutForm from "@/components/checkout/CheckoutForm";
 import { createOrder } from "@/services/api";
@@ -10,11 +11,41 @@ import { createOrder } from "@/services/api";
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalAmount, clearCart } = useCart();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const { addToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const formatPrice = (price: number) => `₹${(price / 100).toFixed(0)}`;
+
+  if (authLoading) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <p className="text-gray-700 text-lg mb-2">Please login to place your order</p>
+          <p className="text-gray-500 text-sm mb-6">You need to be logged in to checkout.</p>
+          <button
+            onClick={() => router.push("/login?redirect=/checkout")}
+            className="bg-[#d1411e] text-white px-6 py-3 rounded-lg hover:bg-[#b8371a] transition-colors font-medium"
+          >
+            Login to Checkout
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -50,8 +81,8 @@ export default function CheckoutPage() {
         customer,
       });
 
-      clearCart();
       router.push(`/orders/${order._id}`);
+      clearCart();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to place order";
       setError(message);

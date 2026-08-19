@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { getOrders, updateOrderStatus } from "@/services/api";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/toast/ToastContext";
 import { Order, OrderStatus } from "@/types";
 
@@ -35,6 +37,8 @@ const formatDate = (date: string) =>
   });
 
 export default function AdminPage() {
+  const router = useRouter();
+  const { isAuthenticated, isAdmin, loading: authLoading } = useAuth();
   const { addToast } = useToast();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,10 +59,16 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
+    if (authLoading) return;
+    if (!isAuthenticated || !isAdmin) {
+      setLoading(false);
+      return;
+    }
+
     fetchOrders();
     const interval = setInterval(fetchOrders, 10000);
     return () => clearInterval(interval);
-  }, [fetchOrders]);
+  }, [fetchOrders, isAuthenticated, isAdmin, authLoading]);
 
   const handleStatusUpdate = async (orderId: string, newStatus: OrderStatus) => {
     setUpdatingId(orderId);
@@ -75,17 +85,7 @@ export default function AdminPage() {
     }
   };
 
-  const filteredOrders = filter === "ALL"
-    ? orders
-    : orders.filter((o) => o.status === filter);
-
-  const stats = {
-    total: orders.length,
-    active: orders.filter((o) => o.status !== "DELIVERED").length,
-    revenue: orders.reduce((sum, o) => sum + o.totalAmount, 0),
-  };
-
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="text-center py-12">
@@ -95,6 +95,43 @@ export default function AdminPage() {
       </div>
     );
   }
+
+  if (!isAuthenticated || !isAdmin) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <p className="text-gray-700 text-lg mb-2">Access Denied</p>
+          <p className="text-gray-500 text-sm mb-6">You need admin privileges to access this page.</p>
+          {!isAuthenticated ? (
+            <button
+              onClick={() => router.push("/login?redirect=/admin")}
+              className="bg-[#d1411e] text-white px-6 py-3 rounded-lg hover:bg-[#b8371a] transition-colors font-medium"
+            >
+              Login as Admin
+            </button>
+          ) : (
+            <button
+              onClick={() => router.push("/")}
+              className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors font-medium"
+            >
+              Go to Home
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  const filteredOrders = filter === "ALL"
+    ? orders
+    : orders.filter((o) => o.status === filter);
+
+  const stats = {
+    total: orders.length,
+    active: orders.filter((o) => o.status !== "DELIVERED").length,
+    revenue: orders.reduce((sum, o) => sum + o.totalAmount, 0),
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">

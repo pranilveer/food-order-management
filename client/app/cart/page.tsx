@@ -2,22 +2,32 @@
 
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function CartPage() {
   const router = useRouter();
   const { items, totalAmount, totalItems, removeItem, updateQuantity, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
 
   const formatPrice = (price: number) => `₹${(price / 100).toFixed(0)}`;
 
+  const handleCheckout = () => {
+    if (!isAuthenticated) {
+      router.push("/login?redirect=/checkout");
+    } else {
+      router.push("/checkout");
+    }
+  };
+
   if (items.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-8 min-h-[60vh]">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Cart</h1>
         <div className="bg-white rounded-lg shadow-md p-6 text-center">
           <p className="text-gray-500 mb-4">Your cart is empty</p>
           <button
             onClick={() => router.push("/")}
-            className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+            className="bg-[#d1411e] text-white px-6 py-2 rounded-lg hover:bg-[#b8371a] transition-colors font-medium"
           >
             Browse Menu
           </button>
@@ -84,6 +94,9 @@ export default function CartPage() {
           <span className="font-semibold text-gray-900">Total</span>
           <span className="font-bold text-lg text-green-600">{formatPrice(totalAmount)}</span>
         </div>
+        {!isAuthenticated && (
+          <p className="text-sm text-orange-600 mb-3 text-center">You&apos;ll need to login before checkout</p>
+        )}
         <div className="flex gap-3">
           <button
             onClick={clearCart}
@@ -92,10 +105,10 @@ export default function CartPage() {
             Clear Cart
           </button>
           <button
-            onClick={() => router.push("/checkout")}
+            onClick={handleCheckout}
             className="flex-1 bg-[#d1411e] text-white py-3 rounded-lg font-medium hover:bg-[#b8371a] transition-colors"
           >
-            Checkout
+            {isAuthenticated ? "Checkout" : "Login to Checkout"}
           </button>
         </div>
       </div>

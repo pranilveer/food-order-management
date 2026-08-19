@@ -4,11 +4,21 @@ import * as api from "@/services/api";
 import OrderStatusPage from "../[id]/page";
 
 jest.mock("@/services/api");
+jest.mock("@/contexts/AuthContext", () => ({
+  useAuth: () => ({
+    user: { _id: "user1", name: "Test User", email: "test@test.com", role: "customer" },
+    isAuthenticated: true,
+    isAdmin: false,
+    loading: false,
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
 
 const mockApi = jest.mocked(api);
 
 jest.mock("next/navigation", () => ({
   useParams: () => ({ id: "order123" }),
+  useRouter: () => ({ push: jest.fn() }),
 }));
 
 jest.mock("next/link", () => {
@@ -19,6 +29,7 @@ jest.mock("next/link", () => {
 
 const mockOrder = {
   _id: "order123abc",
+  userId: "user1",
   items: [
     { menuItemId: "1", name: "Margherita Pizza", price: 29900, quantity: 2, subtotal: 59800 },
     { menuItemId: "2", name: "Pepperoni Pizza", price: 39900, quantity: 1, subtotal: 39900 },

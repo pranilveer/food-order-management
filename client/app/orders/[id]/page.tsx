@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { getOrderById } from "@/services/api";
+import { useAuth } from "@/contexts/AuthContext";
 import { Order, OrderStatus } from "@/types";
 
 const STATUS_STEPS: { key: OrderStatus; label: string }[] = [
@@ -17,42 +18,62 @@ function StatusTimeline({ currentStatus }: { currentStatus: OrderStatus }) {
   const currentIndex = STATUS_STEPS.findIndex((s) => s.key === currentStatus);
 
   return (
-    <div className="flex items-center justify-between mb-8">
-      {STATUS_STEPS.map((step, index) => {
-        const isActive = index <= currentIndex;
-        return (
-          <div key={step.key} className="flex-1 flex flex-col items-center">
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
-                isActive
-                  ? "bg-orange-500 text-white"
-                  : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              {index + 1}
+    <div className="relative">
+      <div className="flex items-start justify-between">
+        {STATUS_STEPS.map((step, index) => {
+          const isActive = index <= currentIndex;
+          const isLast = index === STATUS_STEPS.length - 1;
+          return (
+            <div key={step.key} className="flex flex-col items-center flex-1 relative">
+              <div className="relative z-10">
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
+                    isActive
+                      ? "bg-[#d1411e] text-white"
+                      : "bg-gray-200 text-gray-500"
+                  }`}
+                >
+                  {index + 1}
+                </div>
+              </div>
+              <span
+                className={`text-[11px] sm:text-xs mt-2 text-center leading-tight ${
+                  isActive ? "text-[#d1411e] font-medium" : "text-gray-400"
+                }`}
+              >
+                {step.label}
+              </span>
+              {!isLast && (
+                <div
+                  className={`absolute top-5 left-[calc(50%+20px)] right-[calc(-50%+20px)] h-0.5 ${
+                    index < currentIndex ? "bg-[#d1411e]" : "bg-gray-200"
+                  }`}
+                />
+              )}
             </div>
-            <span
-              className={`text-xs mt-2 text-center ${
-                isActive ? "text-orange-600 font-medium" : "text-gray-400"
-              }`}
-            >
-              {step.label}
-            </span>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
 
 export default function OrderStatusPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (authLoading) return;
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
 
     const fetchOrder = async () => {
@@ -79,7 +100,7 @@ export default function OrderStatusPage() {
       mounted = false;
       clearInterval(interval);
     };
-  }, [id]);
+  }, [id, isAuthenticated, authLoading]);
 
   const formatPrice = (price: number) => `₹${(price / 100).toFixed(0)}`;
 
@@ -95,6 +116,22 @@ export default function OrderStatusPage() {
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
           <p className="text-gray-500">Loading order details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <div className="bg-white rounded-lg shadow-md p-6 text-center">
+          <p className="text-gray-700 text-lg mb-2">Please login to view order details</p>
+          <button
+            onClick={() => router.push("/login?redirect=/orders")}
+            className="bg-[#d1411e] text-white px-6 py-3 rounded-lg hover:bg-[#b8371a] transition-colors font-medium mt-4"
+          >
+            Login
+          </button>
         </div>
       </div>
     );
@@ -119,7 +156,7 @@ export default function OrderStatusPage() {
   if (!order) return null;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-8 min-h-[60vh]">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Order Status</h1>
       <p className="text-gray-500 mb-8">
         Order #{order._id.slice(-8).toUpperCase()}
@@ -180,7 +217,7 @@ export default function OrderStatusPage() {
       <div className="text-center">
         <Link
           href="/"
-          className="text-orange-500 hover:text-orange-600 underline"
+          className="inline-block bg-[#d1411e] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#b8371a] transition-colors"
         >
           Order More
         </Link>

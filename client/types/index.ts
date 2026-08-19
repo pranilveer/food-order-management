@@ -29,12 +29,25 @@ export type OrderStatus =
 
 export interface Order {
   _id: string;
+  userId: string;
   items: OrderItem[];
   customer: Customer;
   totalAmount: number;
   status: OrderStatus;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: "customer" | "admin";
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
 }
 
 export interface ApiResponse<T> {

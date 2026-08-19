@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import LayoutShell from "@/components/LayoutShell";
 import ClientProviders from "@/components/ClientProviders";
 import "./globals.css";
 
@@ -35,9 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 min-h-screen`}
       >
         <ClientProviders>
-          <Navbar />
-          {children}
-          <Footer />
+          <LayoutShell>{children}</LayoutShell>
         </ClientProviders>
       </body>
     </html>

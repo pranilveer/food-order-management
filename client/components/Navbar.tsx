@@ -4,14 +4,18 @@ import styles from '../styles/Navbar.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from './cart/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 
 export default function Navbar() {
   const { totalItems } = useCart();
+  const { user, isAuthenticated, logout } = useAuth();
   const cartCount = totalItems;
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   return (
+    <>
     <div className={styles.container}>
       <div className={styles.item}>
         <div className={styles.callButton}>
@@ -23,11 +27,16 @@ export default function Navbar() {
         </div>
       </div>
       <div className={styles.item}>
-        <Image className={styles.mobileLogo} src="/img/logo.png" alt="Logo" width={100} height={35} />
+        <Link href="/" onClick={() => setMenuOpen(false)}><Image className={styles.mobileLogo} src="/img/logo.png" alt="Logo" width={100} height={35} /></Link>
         <ul className={`${styles.list} ${menuOpen ? styles.listOpen : ''}`}>
           <li className={styles.listItem}><Link href="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-          <Image className={styles.menuLogo} src="/img/logo.png" alt="Logo" width={140} height={49} />
-          <li className={styles.listItem}><Link href="/orders" onClick={() => setMenuOpen(false)}>Orders</Link></li>
+          <Link href="/" onClick={() => setMenuOpen(false)}><Image className={styles.menuLogo} src="/img/logo.png" alt="Logo" width={140} height={49} /></Link>
+          {isAuthenticated && (
+            <li className={styles.listItem}><Link href="/orders" onClick={() => setMenuOpen(false)}>Orders</Link></li>
+          )}
+          {isAuthenticated && user?.role === "admin" && (
+            <li className={styles.listItem}><Link href="/admin" onClick={() => setMenuOpen(false)}>Admin</Link></li>
+          )}
           <li className={styles.listItem}><Link href="#footer" onClick={() => setMenuOpen(false)}>Contact</Link></li>
         </ul>
       </div>
@@ -40,6 +49,26 @@ export default function Navbar() {
           </svg>
           <span className={styles.counter}>{cartCount}</span>
         </Link>
+
+        {isAuthenticated ? (
+          <div className="flex items-center gap-2 ml-3">
+            <span className="text-white text-sm font-medium hidden md:block">{user?.name}</span>
+            <button
+              onClick={() => setShowLogoutModal(true)}
+              className="text-white text-sm border border-white/50 rounded-lg px-3 py-1.5 hover:bg-white/10 transition-colors hidden md:block"
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <Link
+            href="/login"
+            className="text-white text-sm border border-white/50 rounded-lg px-3 py-1.5 hover:bg-white/10 transition-colors ml-3 hidden md:block"
+          >
+            Login
+          </Link>
+        )}
+
         <button
           className={styles.hamburger}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -51,5 +80,29 @@ export default function Navbar() {
         </button>
       </div>
     </div>
+
+    {showLogoutModal && (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
+        <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Confirm Logout</h3>
+          <p className="text-sm text-gray-500 mb-6">Are you sure you want to logout?</p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowLogoutModal(false)}
+              className="flex-1 border border-gray-300 text-gray-700 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => { logout(); setShowLogoutModal(false); setMenuOpen(false); }}
+              className="flex-1 bg-[#d1411e] text-white py-2.5 rounded-lg font-medium hover:bg-[#b8371a] transition-colors text-sm"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
