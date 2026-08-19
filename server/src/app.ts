@@ -10,7 +10,6 @@ const app = express();
 
 app.use(cors({
   origin: [
-    "https://food-order-assign.vercel.app",
     "https://hotnspicy.vercel.app",
     "http://localhost:3000",
   ],
